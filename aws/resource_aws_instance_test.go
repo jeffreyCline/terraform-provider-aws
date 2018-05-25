@@ -133,24 +133,6 @@ func TestAccAWSInstance_basic(t *testing.T) {
 				),
 			},
 
-			// We repeat the exact same test so that we can be sure
-			// that the user data hash stuff is working without generating
-			// an incorrect diff.
-			{
-				Config: testAccInstanceConfig(rInt),
-				Check: resource.ComposeTestCheckFunc(
-					testAccCheckInstanceExists(
-						"aws_instance.foo", &v),
-					testCheck(rInt),
-					resource.TestCheckResourceAttr(
-						"aws_instance.foo",
-						"user_data",
-						"3dc39dda39be1205215e776bad998da361a5955d"),
-					resource.TestCheckResourceAttr(
-						"aws_instance.foo", "ebs_block_device.#", "0"),
-				),
-			},
-
 			// Clean up volume created above
 			{
 				Config: testAccInstanceConfig(rInt),
@@ -1724,10 +1706,10 @@ resource "aws_security_group" "tf_test_foo" {
 
 resource "aws_instance" "foo" {
 	# us-west-2
-	ami = "ami-4fccb37f"
+	ami = "ami-db710fa3"
 	availability_zone = "us-west-2a"
 
-	instance_type = "m1.small"
+	instance_type = "m4.large"
 	security_groups = ["${aws_security_group.tf_test_foo.name}"]
 	user_data = "foo:-with-character's"
 }
